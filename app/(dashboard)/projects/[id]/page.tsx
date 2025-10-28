@@ -4,13 +4,18 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
 import { Project, Task } from '@/db/schema';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
+import dynamic from 'next/dynamic';
+
+const LexicalEditor = dynamic(() => import('@/components/editor/LexicalEditor'), {
+  ssr: false,
+});
 
 const projectSchema = z.object({
   name: z.string().min(1, 'プロジェクト名は必須です').max(100),
@@ -56,6 +61,7 @@ export default function ProjectDetailPage() {
     watch,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -543,13 +549,19 @@ export default function ProjectDetailPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           説明
                         </label>
-                        <textarea
-                          {...register('description')}
-                          rows={4}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
+                        <Controller
+                          name="description"
+                          control={control}
+                          render={({ field }) => (
+                            <LexicalEditor
+                              value={field.value || ''}
+                              onChange={field.onChange}
+                              placeholder="プロジェクトの説明を入力..."
+                            />
+                          )}
                         />
                         {errors.description && (
                           <p className="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -618,9 +630,14 @@ export default function ProjectDetailPage() {
                         <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           説明
                         </label>
-                        <p className="mt-1 text-gray-900 dark:text-white">
-                          {project.description || '説明なし'}
-                        </p>
+                        {project.description ? (
+                          <div
+                            className="mt-1 text-gray-900 dark:text-white prose dark:prose-invert max-w-none"
+                            dangerouslySetInnerHTML={{ __html: project.description }}
+                          />
+                        ) : (
+                          <p className="mt-1 text-gray-500 dark:text-gray-400">説明なし</p>
+                        )}
                       </div>
 
                       <div>

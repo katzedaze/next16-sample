@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
+
+const LexicalEditor = dynamic(() => import('@/components/editor/LexicalEditor'), {
+  ssr: false,
+});
 
 const projectSchema = z.object({
   name: z.string().min(1, "プロジェクト名は必須です").max(100),
@@ -46,6 +51,7 @@ export function CreateProjectModal({
     watch,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -148,16 +154,20 @@ export function CreateProjectModal({
           <div>
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               説明
             </label>
-            <textarea
-              {...register("description")}
-              id="description"
-              rows={3}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
-              placeholder="プロジェクトの説明を入力..."
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <LexicalEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="プロジェクトの説明を入力..."
+                />
+              )}
             />
             {errors.description && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">

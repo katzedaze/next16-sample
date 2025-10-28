@@ -442,9 +442,14 @@ export default function TaskDetailPage() {
                       <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         説明
                       </label>
-                      <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
-                        {task.description || '説明なし'}
-                      </p>
+                      {task.description ? (
+                        <div
+                          className="text-gray-900 dark:text-white prose dark:prose-invert max-w-none"
+                          dangerouslySetInnerHTML={{ __html: task.description }}
+                        />
+                      ) : (
+                        <p className="text-gray-500 dark:text-gray-400">説明なし</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
