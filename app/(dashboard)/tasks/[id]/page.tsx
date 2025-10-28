@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { StatusBadge } from '@/components/tasks/StatusBadge';
 import { PriorityBadge } from '@/components/tasks/PriorityBadge';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import dynamic from 'next/dynamic';
 
 const LexicalEditor = dynamic(() => import('@/components/editor/LexicalEditor'), {
@@ -214,8 +215,8 @@ export default function TaskDetailPage() {
 
   if (isPending || isLoading || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
@@ -225,44 +226,8 @@ export default function TaskDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ナビゲーション */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow</h1>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  ダッシュボード
-                </Link>
-                <Link
-                  href="/projects"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  プロジェクト
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">{session.user?.name}</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-gray-700 hover:text-gray-900"
-                >
-                  設定
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
       {/* メインコンテンツ */}
       <div className="py-10">
@@ -272,7 +237,7 @@ export default function TaskDetailPage() {
             <div className="flex items-center mb-4">
               <Link
                 href={`/projects/${task.projectId}`}
-                className="text-gray-500 hover:text-gray-700 mr-4"
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-4"
               >
                 <svg
                   className="w-6 h-6"
@@ -288,7 +253,7 @@ export default function TaskDetailPage() {
                   />
                 </svg>
               </Link>
-              <h1 className="text-3xl font-bold text-gray-900">{task.title}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{task.title}</h1>
             </div>
 
             {project && (
@@ -299,7 +264,7 @@ export default function TaskDetailPage() {
                 />
                 <Link
                   href={`/projects/${project.id}`}
-                  className="text-sm text-gray-600 hover:text-gray-900"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 >
                   {project.name}
                 </Link>
@@ -310,8 +275,8 @@ export default function TaskDetailPage() {
               <div
                 className={`mb-4 p-4 rounded-md ${
                   message.type === 'success'
-                    ? 'bg-green-50 text-green-800'
-                    : 'bg-red-50 text-red-800'
+                    ? 'bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200'
+                    : 'bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-200'
                 }`}
               >
                 {message.text}
@@ -322,13 +287,13 @@ export default function TaskDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* タスク詳細 */}
             <div className="lg:col-span-2">
-              <div className="bg-white shadow rounded-lg p-6">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold text-gray-900">タスク詳細</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">タスク詳細</h2>
                   {!isEditing && (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="text-sm text-blue-600 hover:text-blue-700"
+                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                     >
                       編集
                     </button>
@@ -338,21 +303,21 @@ export default function TaskDetailPage() {
                 {isEditing ? (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         タスク名 *
                       </label>
                       <input
                         {...register('title')}
                         type="text"
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium placeholder-gray-400"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
                       />
                       {errors.title && (
-                        <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title.message}</p>
                       )}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         説明
                       </label>
                       <Controller
@@ -367,18 +332,18 @@ export default function TaskDetailPage() {
                         )}
                       />
                       {errors.description && (
-                        <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description.message}</p>
                       )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           ステータス
                         </label>
                         <select
                           {...register('status')}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                         >
                           <option value="todo">TODO</option>
                           <option value="in_progress">進行中</option>
@@ -386,17 +351,17 @@ export default function TaskDetailPage() {
                           <option value="done">完了</option>
                         </select>
                         {errors.status && (
-                          <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
+                          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.status.message}</p>
                         )}
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           優先度
                         </label>
                         <select
                           {...register('priority')}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                         >
                           <option value="low">低</option>
                           <option value="medium">中</option>
@@ -404,18 +369,18 @@ export default function TaskDetailPage() {
                           <option value="critical">緊急</option>
                         </select>
                         {errors.priority && (
-                          <p className="mt-1 text-sm text-red-600">{errors.priority.message}</p>
+                          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.priority.message}</p>
                         )}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         担当者
                       </label>
                       <select
                         {...register('assigneeId')}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                       >
                         <option value="">未割り当て</option>
                         {members.map((member) => (
@@ -425,21 +390,21 @@ export default function TaskDetailPage() {
                         ))}
                       </select>
                       {errors.assigneeId && (
-                        <p className="mt-1 text-sm text-red-600">{errors.assigneeId.message}</p>
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.assigneeId.message}</p>
                       )}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         期限日
                       </label>
                       <input
                         {...register('dueDate')}
                         type="date"
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                       />
                       {errors.dueDate && (
-                        <p className="mt-1 text-sm text-red-600">{errors.dueDate.message}</p>
+                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.dueDate.message}</p>
                       )}
                     </div>
 
@@ -451,7 +416,7 @@ export default function TaskDetailPage() {
                           reset();
                         }}
                         disabled={isSaving}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
                       >
                         キャンセル
                       </button>
@@ -467,31 +432,31 @@ export default function TaskDetailPage() {
                 ) : (
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         タスク名
                       </label>
-                      <p className="text-lg text-gray-900">{task.title}</p>
+                      <p className="text-lg text-gray-900 dark:text-white">{task.title}</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         説明
                       </label>
-                      <p className="text-gray-900 whitespace-pre-wrap">
+                      <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
                         {task.description || '説明なし'}
                       </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-2">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                           ステータス
                         </label>
                         <StatusBadge status={task.status as 'todo' | 'in_progress' | 'review' | 'done'} />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-2">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                           優先度
                         </label>
                         <PriorityBadge priority={task.priority as 'low' | 'medium' | 'high' | 'critical'} />
@@ -499,10 +464,10 @@ export default function TaskDetailPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         担当者
                       </label>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 dark:text-white">
                         {task.assigneeId
                           ? members.find(m => m.id === task.assigneeId)?.name || '不明'
                           : '未割り当て'}
@@ -510,10 +475,10 @@ export default function TaskDetailPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         期限日
                       </label>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 dark:text-white">
                         {task.dueDate
                           ? new Date(task.dueDate).toLocaleDateString('ja-JP')
                           : '期限なし'}
@@ -521,19 +486,19 @@ export default function TaskDetailPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         作成日
                       </label>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 dark:text-white">
                         {new Date(task.createdAt).toLocaleString('ja-JP')}
                       </p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-500 mb-2">
+                      <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         更新日
                       </label>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 dark:text-white">
                         {new Date(task.updatedAt).toLocaleString('ja-JP')}
                       </p>
                     </div>
@@ -542,11 +507,11 @@ export default function TaskDetailPage() {
               </div>
 
               {/* アクティビティログ */}
-              <div className="bg-white shadow rounded-lg p-6 mt-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">アクティビティ</h2>
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mt-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">アクティビティ</h2>
                 <div className="space-y-4">
                   {activityLogs.length === 0 ? (
-                    <p className="text-sm text-gray-500">アクティビティはありません</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">アクティビティはありません</p>
                   ) : (
                     <div className="flow-root">
                       <ul className="-mb-8">
@@ -555,14 +520,14 @@ export default function TaskDetailPage() {
                             <div className="relative pb-8">
                               {index !== activityLogs.length - 1 ? (
                                 <span
-                                  className="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200"
+                                  className="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700"
                                   aria-hidden="true"
                                 />
                               ) : null}
                               <div className="relative flex items-start space-x-3">
                                 <div className="relative">
-                                  <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center ring-8 ring-white">
-                                    <span className="text-gray-500 font-medium text-sm">
+                                  <div className="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
+                                    <span className="text-gray-500 dark:text-gray-400 font-medium text-sm">
                                       {log.userName.charAt(0).toUpperCase()}
                                     </span>
                                   </div>
@@ -570,15 +535,15 @@ export default function TaskDetailPage() {
                                 <div className="min-w-0 flex-1">
                                   <div>
                                     <div className="text-sm">
-                                      <span className="font-medium text-gray-900">
+                                      <span className="font-medium text-gray-900 dark:text-white">
                                         {log.userName}
                                       </span>
                                     </div>
-                                    <p className="mt-0.5 text-sm text-gray-500">
+                                    <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
                                       {new Date(log.createdAt).toLocaleString('ja-JP')}
                                     </p>
                                   </div>
-                                  <div className="mt-2 text-sm text-gray-700">
+                                  <div className="mt-2 text-sm text-gray-700 dark:text-gray-300">
                                     {log.action === 'created' ? (
                                       <span>タスクを作成しました</span>
                                     ) : log.action === 'updated' && log.field ? (
@@ -586,10 +551,10 @@ export default function TaskDetailPage() {
                                         <span className="font-medium">{log.field}</span> を{' '}
                                         {log.oldValue && (
                                           <>
-                                            <span className="text-red-600">{log.oldValue}</span> から{' '}
+                                            <span className="text-red-600 dark:text-red-400">{log.oldValue}</span> から{' '}
                                           </>
                                         )}
-                                        <span className="text-green-600">{log.newValue}</span> に変更しました
+                                        <span className="text-green-600 dark:text-green-400">{log.newValue}</span> に変更しました
                                       </span>
                                     ) : (
                                       <span>タスクを{log.action}しました</span>
@@ -610,14 +575,14 @@ export default function TaskDetailPage() {
             {/* サイドバー */}
             <div className="space-y-6">
               {/* クイックアクション */}
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   クイックアクション
                 </h3>
                 <div className="space-y-3">
                   <Link
                     href={`/projects/${task.projectId}`}
-                    className="block w-full px-4 py-2 text-sm font-medium text-center text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                    className="block w-full px-4 py-2 text-sm font-medium text-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50"
                   >
                     プロジェクトに戻る
                   </Link>
@@ -625,8 +590,8 @@ export default function TaskDetailPage() {
               </div>
 
               {/* 危険な操作 */}
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   危険な操作
                 </h3>
                 <button
@@ -635,7 +600,7 @@ export default function TaskDetailPage() {
                 >
                   タスクを削除
                 </button>
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   この操作は取り消せません。
                 </p>
               </div>

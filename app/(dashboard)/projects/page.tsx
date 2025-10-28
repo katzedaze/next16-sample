@@ -6,7 +6,7 @@ import { useSession } from '@/lib/auth-client';
 import { Project } from '@/db/schema';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { CreateProjectModal } from '@/components/projects/CreateProjectModal';
-import Link from 'next/link';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -75,51 +75,15 @@ export default function ProjectsPage() {
 
   if (isPending || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ナビゲーション */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow</h1>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  ダッシュボード
-                </Link>
-                <Link
-                  href="/projects"
-                  className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  プロジェクト
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">{session.user?.name}</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-gray-700 hover:text-gray-900"
-                >
-                  設定
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
       {/* メインコンテンツ */}
       <div className="py-10">
@@ -127,7 +91,7 @@ export default function ProjectsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:flex md:items-center md:justify-between">
               <div className="flex-1 min-w-0">
-                <h2 className="text-3xl font-bold leading-tight text-gray-900">
+                <h2 className="text-3xl font-bold leading-tight text-gray-900 dark:text-white">
                   プロジェクト
                 </h2>
               </div>
@@ -162,11 +126,11 @@ export default function ProjectsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="プロジェクトを検索..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 font-medium placeholder-gray-400"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white dark:bg-gray-800 font-medium placeholder-gray-400 dark:placeholder-gray-500"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   検索
                 </button>
@@ -177,7 +141,7 @@ export default function ProjectsPage() {
                       setSearchQuery('');
                       fetchProjects();
                     }}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                    className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
                   >
                     クリア
                   </button>
@@ -191,12 +155,12 @@ export default function ProjectsPage() {
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {isLoading ? (
               <div className="flex justify-center items-center py-12">
-                <div className="text-gray-600">読み込み中...</div>
+                <div className="text-gray-600 dark:text-gray-400">読み込み中...</div>
               </div>
             ) : projects.length === 0 ? (
               <div className="text-center py-12">
                 <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
+                  className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -208,10 +172,10 @@ export default function ProjectsPage() {
                     d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
                   />
                 </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
                   プロジェクトがありません
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   新しいプロジェクトを作成して始めましょう
                 </p>
                 <div className="mt-6">

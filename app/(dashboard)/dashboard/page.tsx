@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
-import Link from 'next/link';
 import StatCard from '@/components/dashboard/StatCard';
 import RecentTasks from '@/components/dashboard/RecentTasks';
 import ProgressChart from '@/components/dashboard/ProgressChart';
-import NotificationBell from '@/components/notifications/NotificationBell';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import { Task, Project } from '@/db/schema';
 
 interface DashboardStats {
@@ -91,53 +90,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ナビゲーション */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow</h1>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  ダッシュボード
-                </Link>
-                <Link
-                  href="/projects"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  プロジェクト
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <NotificationBell />
-                <span className="text-sm text-gray-700">{session.user?.name}</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-gray-700 hover:text-gray-900"
-                >
-                  設定
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
       {/* メインコンテンツ */}
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* ヘッダー */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">ダッシュボード</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">ダッシュボード</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               プロジェクトとタスクの概要
             </p>
           </div>

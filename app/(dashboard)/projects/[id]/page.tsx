@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 
 const projectSchema = z.object({
   name: z.string().min(1, 'プロジェクト名は必須です').max(100),
@@ -230,8 +231,8 @@ export default function ProjectDetailPage() {
 
   if (isPending || isLoading || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
@@ -249,44 +250,8 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ナビゲーション */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow</h1>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  ダッシュボード
-                </Link>
-                <Link
-                  href="/projects"
-                  className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  プロジェクト
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">{session.user?.name}</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-gray-700 hover:text-gray-900"
-                >
-                  設定
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
       {/* メインコンテンツ */}
       <div className="py-10">
@@ -296,7 +261,7 @@ export default function ProjectDetailPage() {
             <div className="flex items-center mb-4">
               <Link
                 href="/projects"
-                className="text-gray-500 hover:text-gray-700 mr-4"
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-4"
               >
                 <svg
                   className="w-6 h-6"
@@ -316,15 +281,15 @@ export default function ProjectDetailPage() {
                 className="w-8 h-8 rounded-full mr-3"
                 style={{ backgroundColor: project.color }}
               />
-              <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{project.name}</h1>
             </div>
 
             {message && (
               <div
                 className={`mb-4 p-4 rounded-md ${
                   message.type === 'success'
-                    ? 'bg-green-50 text-green-800'
-                    : 'bg-red-50 text-red-800'
+                    ? 'bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200'
+                    : 'bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-200'
                 }`}
               >
                 {message.text}
@@ -332,14 +297,14 @@ export default function ProjectDetailPage() {
             )}
 
             {/* タブナビゲーション */}
-            <div className="border-b border-gray-200">
+            <div className="border-b border-gray-200 dark:border-gray-700">
               <nav className="-mb-px flex space-x-8">
                 <button
                   onClick={() => setActiveTab('tasks')}
                   className={`${
                     activeTab === 'tasks'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                 >
                   タスク ({taskStats.total})
@@ -348,8 +313,8 @@ export default function ProjectDetailPage() {
                   onClick={() => setActiveTab('info')}
                   className={`${
                     activeTab === 'info'
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                 >
                   プロジェクト情報
@@ -362,13 +327,13 @@ export default function ProjectDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* タスク一覧 */}
               <div className="lg:col-span-3">
-                <div className="bg-white shadow rounded-lg p-6">
+                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-semibold text-gray-900">タスク一覧</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">タスク一覧</h2>
                     <div className="flex space-x-2">
                       <Link
                         href={`/projects/${params.id}/board`}
-                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
                         <svg
                           className="-ml-1 mr-2 h-5 w-5"
@@ -387,7 +352,7 @@ export default function ProjectDetailPage() {
                       </Link>
                       <Link
                         href={`/projects/${params.id}/graph`}
-                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
                         <svg
                           className="-ml-1 mr-2 h-5 w-5"
@@ -428,12 +393,12 @@ export default function ProjectDetailPage() {
 
                   {isLoadingTasks ? (
                     <div className="flex justify-center py-12">
-                      <div className="text-gray-600">読み込み中...</div>
+                      <div className="text-gray-600 dark:text-gray-400">読み込み中...</div>
                     </div>
                   ) : tasks.length === 0 ? (
                     <div className="text-center py-12">
                       <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
+                        className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -445,10 +410,10 @@ export default function ProjectDetailPage() {
                           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                         />
                       </svg>
-                      <h3 className="mt-2 text-sm font-medium text-gray-900">
+                      <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
                         タスクがありません
                       </h3>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         新しいタスクを作成して始めましょう
                       </p>
                     </div>
@@ -476,17 +441,17 @@ export default function ProjectDetailPage() {
                       <button
                         onClick={() => fetchTasks(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1 text-sm text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         前へ
                       </button>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         {currentPage} / {totalPages}
                       </span>
                       <button
                         onClick={() => fetchTasks(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1 text-sm text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         次へ
                       </button>
@@ -497,35 +462,35 @@ export default function ProjectDetailPage() {
 
               {/* サイドバー - 統計 */}
               <div className="space-y-6">
-                <div className="bg-white shadow rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">統計</h3>
+                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">統計</h3>
                   <div className="space-y-4">
                     <div>
-                      <div className="text-sm text-gray-500">合計タスク</div>
-                      <div className="text-2xl font-bold text-gray-900">{taskStats.total}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">合計タスク</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{taskStats.total}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">TODO</div>
-                      <div className="text-2xl font-bold text-gray-600">{taskStats.todo}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">TODO</div>
+                      <div className="text-2xl font-bold text-gray-600 dark:text-gray-300">{taskStats.todo}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">進行中</div>
-                      <div className="text-2xl font-bold text-blue-600">{taskStats.inProgress}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">進行中</div>
+                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{taskStats.inProgress}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">レビュー</div>
-                      <div className="text-2xl font-bold text-yellow-600">{taskStats.review}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">レビュー</div>
+                      <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{taskStats.review}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">完了</div>
-                      <div className="text-2xl font-bold text-green-600">{taskStats.done}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">完了</div>
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">{taskStats.done}</div>
                     </div>
                   </div>
                 </div>
 
                 {/* 危険な操作 */}
-                <div className="bg-white shadow rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     危険な操作
                   </h3>
                   <button
@@ -534,7 +499,7 @@ export default function ProjectDetailPage() {
                   >
                     プロジェクトを削除
                   </button>
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                     この操作は取り消せません。プロジェクトに関連するすべてのタスクも削除されます。
                   </p>
                 </div>
@@ -546,15 +511,15 @@ export default function ProjectDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* プロジェクト情報 */}
               <div className="lg:col-span-2">
-                <div className="bg-white shadow rounded-lg p-6">
+                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                       プロジェクト情報
                     </h2>
                     {!isEditing && (
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="text-sm text-blue-600 hover:text-blue-700"
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                       >
                         編集
                       </button>
@@ -564,37 +529,37 @@ export default function ProjectDetailPage() {
                   {isEditing ? (
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           プロジェクト名
                         </label>
                         <input
                           {...register('name')}
                           type="text"
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                         />
                         {errors.name && (
-                          <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>
                         )}
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           説明
                         </label>
                         <textarea
                           {...register('description')}
                           rows={4}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
                         />
                         {errors.description && (
-                          <p className="mt-1 text-sm text-red-600">
+                          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                             {errors.description.message}
                           </p>
                         )}
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           カラー
                         </label>
                         <div className="flex items-center space-x-2 mb-3">
@@ -605,8 +570,8 @@ export default function ProjectDetailPage() {
                               onClick={() => setValue('color', color)}
                               className={`w-8 h-8 rounded-full border-2 transition-all ${
                                 selectedColor === color
-                                  ? 'border-gray-900 scale-110'
-                                  : 'border-gray-300 hover:scale-105'
+                                  ? 'border-gray-900 dark:border-gray-100 scale-110'
+                                  : 'border-gray-300 dark:border-gray-600 hover:scale-105'
                               }`}
                               style={{ backgroundColor: color }}
                             />
@@ -627,7 +592,7 @@ export default function ProjectDetailPage() {
                             reset();
                           }}
                           disabled={isSaving}
-                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
                         >
                           キャンセル
                         </button>
@@ -643,23 +608,23 @@ export default function ProjectDetailPage() {
                   ) : (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           プロジェクト名
                         </label>
-                        <p className="mt-1 text-gray-900">{project.name}</p>
+                        <p className="mt-1 text-gray-900 dark:text-white">{project.name}</p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           説明
                         </label>
-                        <p className="mt-1 text-gray-900">
+                        <p className="mt-1 text-gray-900 dark:text-white">
                           {project.description || '説明なし'}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           カラー
                         </label>
                         <div className="mt-1 flex items-center">
@@ -667,24 +632,24 @@ export default function ProjectDetailPage() {
                             className="w-6 h-6 rounded-full mr-2"
                             style={{ backgroundColor: project.color }}
                           />
-                          <span className="text-gray-900">{project.color}</span>
+                          <span className="text-gray-900 dark:text-white">{project.color}</span>
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           作成日
                         </label>
-                        <p className="mt-1 text-gray-900">
+                        <p className="mt-1 text-gray-900 dark:text-white">
                           {new Date(project.createdAt).toLocaleString('ja-JP')}
                         </p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-500">
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                           更新日
                         </label>
-                        <p className="mt-1 text-gray-900">
+                        <p className="mt-1 text-gray-900 dark:text-white">
                           {new Date(project.updatedAt).toLocaleString('ja-JP')}
                         </p>
                       </div>
@@ -695,20 +660,20 @@ export default function ProjectDetailPage() {
 
               {/* サイドバー - 統計 */}
               <div className="space-y-6">
-                <div className="bg-white shadow rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">統計</h3>
+                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">統計</h3>
                   <div className="space-y-4">
                     <div>
-                      <div className="text-sm text-gray-500">タスク数</div>
-                      <div className="text-2xl font-bold text-gray-900">{taskStats.total}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">タスク数</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{taskStats.total}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">完了タスク</div>
-                      <div className="text-2xl font-bold text-green-600">{taskStats.done}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">完了タスク</div>
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">{taskStats.done}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500">進行中タスク</div>
-                      <div className="text-2xl font-bold text-blue-600">{taskStats.inProgress}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">進行中タスク</div>
+                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{taskStats.inProgress}</div>
                     </div>
                   </div>
                 </div>

@@ -113,13 +113,13 @@ export function CreateTaskModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto animate-slide-in-from-bottom">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">新規タスク</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">新規タスク</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             disabled={isLoading}
           >
             <svg
@@ -139,32 +139,32 @@ export function CreateTaskModal({
         </div>
 
         {errorMessage && (
-          <div className="mb-4 p-4 bg-red-50 rounded-md">
-            <p className="text-sm text-red-800">{errorMessage}</p>
+          <div className="mb-4 p-4 bg-red-50 dark:bg-red-900 rounded-md">
+            <p className="text-sm text-red-800 dark:text-red-200">{errorMessage}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               タスク名 *
             </label>
             <input
               {...register('title')}
               type="text"
               id="title"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium placeholder-gray-400"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
               placeholder="例: デザインレビューを実施"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title.message}</p>
             )}
           </div>
 
           <div>
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               説明
             </label>
@@ -180,19 +180,19 @@ export function CreateTaskModal({
               )}
             />
             {errors.description && (
-              <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description.message}</p>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 ステータス
               </label>
               <select
                 {...register('status')}
                 id="status"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
               >
                 <option value="todo">TODO</option>
                 <option value="in_progress">進行中</option>
@@ -200,18 +200,18 @@ export function CreateTaskModal({
                 <option value="done">完了</option>
               </select>
               {errors.status && (
-                <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.status.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 優先度
               </label>
               <select
                 {...register('priority')}
                 id="priority"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
               >
                 <option value="low">低</option>
                 <option value="medium">中</option>
@@ -219,19 +219,19 @@ export function CreateTaskModal({
                 <option value="critical">緊急</option>
               </select>
               {errors.priority && (
-                <p className="mt-1 text-sm text-red-600">{errors.priority.message}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.priority.message}</p>
               )}
             </div>
           </div>
 
           <div>
-            <label htmlFor="assigneeId" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="assigneeId" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               担当者
             </label>
             <select
               {...register('assigneeId')}
               id="assigneeId"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
             >
               <option value="">未割り当て</option>
               {members.map((member) => (
@@ -241,22 +241,22 @@ export function CreateTaskModal({
               ))}
             </select>
             {errors.assigneeId && (
-              <p className="mt-1 text-sm text-red-600">{errors.assigneeId.message}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.assigneeId.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               期限日
             </label>
             <input
               {...register('dueDate')}
               type="date"
               id="dueDate"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium"
             />
             {errors.dueDate && (
-              <p className="mt-1 text-sm text-red-600">{errors.dueDate.message}</p>
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.dueDate.message}</p>
             )}
           </div>
 
@@ -265,7 +265,7 @@ export function CreateTaskModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
               キャンセル
             </button>

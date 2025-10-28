@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession, signOut } from '@/lib/auth-client';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 
 const profileSchema = z.object({
   name: z.string().min(2, '名前は2文字以上である必要があります'),
@@ -168,8 +169,8 @@ export default function SettingsPage() {
 
   if (isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
@@ -179,208 +180,212 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">設定</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            アカウント情報とセキュリティ設定を管理します
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
-        {/* プロフィール設定 */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            プロフィール情報
-          </h2>
+      <div className="py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">設定</h1>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              アカウント情報とセキュリティ設定を管理します
+            </p>
+          </div>
 
-          {profileMessage && (
-            <div
-              className={`mb-4 p-4 rounded-md ${
-                profileMessage.type === 'success'
-                  ? 'bg-green-50 text-green-800'
-                  : 'bg-red-50 text-red-800'
-              }`}
-            >
-              {profileMessage.text}
-            </div>
-          )}
+          {/* プロフィール設定 */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              プロフィール情報
+            </h2>
 
-          <form onSubmit={handleSubmitProfile(onSubmitProfile)} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                名前
-              </label>
-              <input
-                {...registerProfile('name')}
-                type="text"
-                id="name"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
-              />
-              {profileErrors.name && (
-                <p className="mt-1 text-sm text-red-600">
-                  {profileErrors.name.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                メールアドレス
-              </label>
-              <input
-                {...registerProfile('email')}
-                type="email"
-                id="email"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
-              />
-              {profileErrors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {profileErrors.email.message}
-                </p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoadingProfile}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
-            >
-              {isLoadingProfile ? '更新中...' : 'プロフィールを更新'}
-            </button>
-          </form>
-        </div>
-
-        {/* パスワード変更 */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            パスワード変更
-          </h2>
-
-          {passwordMessage && (
-            <div
-              className={`mb-4 p-4 rounded-md ${
-                passwordMessage.type === 'success'
-                  ? 'bg-green-50 text-green-800'
-                  : 'bg-red-50 text-red-800'
-              }`}
-            >
-              {passwordMessage.text}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSubmitPassword(onSubmitPassword)}
-            className="space-y-4"
-          >
-            <div>
-              <label
-                htmlFor="currentPassword"
-                className="block text-sm font-medium text-gray-700"
+            {profileMessage && (
+              <div
+                className={`mb-4 p-4 rounded-md ${
+                  profileMessage.type === 'success'
+                    ? 'bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200'
+                    : 'bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-200'
+                }`}
               >
-                現在のパスワード
-              </label>
-              <input
-                {...registerPassword('currentPassword')}
-                type="password"
-                id="currentPassword"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
-              />
-              {passwordErrors.currentPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {passwordErrors.currentPassword.message}
-                </p>
-              )}
-            </div>
+                {profileMessage.text}
+              </div>
+            )}
 
-            <div>
-              <label
-                htmlFor="newPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                新しいパスワード
-              </label>
-              <input
-                {...registerPassword('newPassword')}
-                type="password"
-                id="newPassword"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
-              />
-              {passwordErrors.newPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {passwordErrors.newPassword.message}
-                </p>
-              )}
-            </div>
+            <form onSubmit={handleSubmitProfile(onSubmitProfile)} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  名前
+                </label>
+                <input
+                  {...registerProfile('name')}
+                  type="text"
+                  id="name"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
+                />
+                {profileErrors.name && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {profileErrors.name.message}
+                  </p>
+                )}
+              </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                新しいパスワード（確認）
-              </label>
-              <input
-                {...registerPassword('confirmPassword')}
-                type="password"
-                id="confirmPassword"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 font-medium"
-              />
-              {passwordErrors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {passwordErrors.confirmPassword.message}
-                </p>
-              )}
-            </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  メールアドレス
+                </label>
+                <input
+                  {...registerProfile('email')}
+                  type="email"
+                  id="email"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
+                />
+                {profileErrors.email && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {profileErrors.email.message}
+                  </p>
+                )}
+              </div>
 
-            <button
-              type="submit"
-              disabled={isLoadingPassword}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
-            >
-              {isLoadingPassword ? '変更中...' : 'パスワードを変更'}
-            </button>
-          </form>
-        </div>
-
-        {/* アカウント管理 */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            アカウント管理
-          </h2>
-
-          <div className="space-y-4">
-            <div>
               <button
-                onClick={handleSignOut}
-                className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                type="submit"
+                disabled={isLoadingProfile}
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
               >
-                ログアウト
+                {isLoadingProfile ? '更新中...' : 'プロフィールを更新'}
               </button>
-            </div>
+            </form>
+          </div>
 
-            <div className="border-t border-gray-200 pt-4">
-              <h3 className="text-sm font-medium text-gray-900 mb-2">
-                アカウント削除
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                アカウントを削除すると、すべてのデータが完全に削除されます。この操作は取り消せません。
-              </p>
-              <button
-                onClick={() => {
-                  if (
-                    confirm(
-                      'アカウントを削除してもよろしいですか？この操作は取り消せません。'
-                    )
-                  ) {
-                    // TODO: アカウント削除APIの実装
-                    alert('アカウント削除APIは未実装です（Phase 2完了後に実装予定）');
-                  }
-                }}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          {/* パスワード変更 */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              パスワード変更
+            </h2>
+
+            {passwordMessage && (
+              <div
+                className={`mb-4 p-4 rounded-md ${
+                  passwordMessage.type === 'success'
+                    ? 'bg-green-50 dark:bg-green-900 text-green-800 dark:text-green-200'
+                    : 'bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-200'
+                }`}
               >
-                アカウントを削除
+                {passwordMessage.text}
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSubmitPassword(onSubmitPassword)}
+              className="space-y-4"
+            >
+              <div>
+                <label
+                  htmlFor="currentPassword"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  現在のパスワード
+                </label>
+                <input
+                  {...registerPassword('currentPassword')}
+                  type="password"
+                  id="currentPassword"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
+                />
+                {passwordErrors.currentPassword && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {passwordErrors.currentPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  新しいパスワード
+                </label>
+                <input
+                  {...registerPassword('newPassword')}
+                  type="password"
+                  id="newPassword"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
+                />
+                {passwordErrors.newPassword && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {passwordErrors.newPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  新しいパスワード（確認）
+                </label>
+                <input
+                  {...registerPassword('confirmPassword')}
+                  type="password"
+                  id="confirmPassword"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900 dark:text-white dark:bg-gray-700 font-medium placeholder-gray-400 dark:placeholder-gray-500"
+                />
+                {passwordErrors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                    {passwordErrors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoadingPassword}
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              >
+                {isLoadingPassword ? '変更中...' : 'パスワードを変更'}
               </button>
+            </form>
+          </div>
+
+          {/* アカウント管理 */}
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              アカウント管理
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <button
+                  onClick={handleSignOut}
+                  className="inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  ログアウト
+                </button>
+              </div>
+
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  アカウント削除
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  アカウントを削除すると、すべてのデータが完全に削除されます。この操作は取り消せません。
+                </p>
+                <button
+                  onClick={() => {
+                    if (
+                      confirm(
+                        'アカウントを削除してもよろしいですか？この操作は取り消せません。'
+                      )
+                    ) {
+                      // TODO: アカウント削除APIの実装
+                      alert('アカウント削除APIは未実装です（Phase 2完了後に実装予定）');
+                    }
+                  }}
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  アカウントを削除
+                </button>
+              </div>
             </div>
           </div>
         </div>

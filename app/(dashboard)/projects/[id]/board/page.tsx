@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
 import { Task, Project } from '@/db/schema';
 import { KanbanColumn } from '@/components/kanban/KanbanColumn';
+import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import Link from 'next/link';
 import {
   DndContext,
@@ -208,51 +209,15 @@ export default function KanbanBoardPage() {
 
   if (isPending || isLoading || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ナビゲーション */}
-      <nav className="bg-white shadow">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">TaskFlow</h1>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  ダッシュボード
-                </Link>
-                <Link
-                  href="/projects"
-                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  プロジェクト
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">{session.user?.name}</span>
-                <Link
-                  href="/settings"
-                  className="text-sm text-gray-700 hover:text-gray-900"
-                >
-                  設定
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <DashboardHeader userName={session.user?.name} />
 
       {/* メインコンテンツ */}
       <div className="py-6">
@@ -263,7 +228,7 @@ export default function KanbanBoardPage() {
               <div className="flex items-center">
                 <Link
                   href={`/projects/${params.id}`}
-                  className="text-gray-500 hover:text-gray-700 mr-4"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-4"
                 >
                   <svg
                     className="w-6 h-6"
@@ -280,10 +245,10 @@ export default function KanbanBoardPage() {
                   </svg>
                 </Link>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                     {project?.name} - カンバンボード
                   </h1>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     タスクをドラッグ&ドロップしてステータスを変更
                   </p>
                 </div>
@@ -291,7 +256,7 @@ export default function KanbanBoardPage() {
               <div className="flex space-x-2">
                 <Link
                   href={`/projects/${params.id}`}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   リストビュー
                 </Link>

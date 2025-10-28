@@ -77,8 +77,8 @@ export default function LexicalEditor({ value, onChange, placeholder }: LexicalE
         ol: 'list-decimal ml-4 mb-2',
         listitem: 'mb-1',
       },
-      quote: 'border-l-4 border-gray-300 pl-4 italic mb-2',
-      link: 'text-blue-600 hover:underline',
+      quote: 'border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic mb-2',
+      link: 'text-blue-600 dark:text-blue-400 hover:underline',
     },
     nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, LinkNode],
     onError: (error: Error) => {
@@ -88,14 +88,14 @@ export default function LexicalEditor({ value, onChange, placeholder }: LexicalE
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="relative border border-gray-300 rounded-md">
+      <div className="relative border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700">
         <RichTextPlugin
           contentEditable={
             <ContentEditable
-              className="min-h-[200px] p-3 outline-none text-gray-900"
+              className="min-h-[200px] p-3 outline-none text-gray-900 dark:text-white"
               aria-placeholder={placeholder || ''}
               placeholder={
-                <div className="absolute top-3 left-3 text-gray-400 pointer-events-none">
+                <div className="absolute top-3 left-3 text-gray-400 dark:text-gray-500 pointer-events-none">
                   {placeholder || ''}
                 </div>
               }
