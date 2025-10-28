@@ -8,7 +8,7 @@ import { z } from 'zod';
 // バリデーションスキーマ
 const updateTaskSchema = z.object({
   title: z.string().min(1).max(200).optional(),
-  description: z.string().nullable().optional(),
+  description: z.string().max(2000).nullable().optional(),
   status: z.enum(['todo', 'in_progress', 'review', 'done']).optional(),
   priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
   assigneeId: z.string().nullable().optional(),

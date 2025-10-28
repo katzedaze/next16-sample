@@ -8,7 +8,7 @@ import { z } from 'zod';
 // バリデーションスキーマ
 const createProjectSchema = z.object({
   name: z.string().min(1, 'プロジェクト名は必須です').max(100),
-  description: z.string().max(500).optional(),
+  description: z.string().max(2000).optional(),
   color: z.string().regex(/^#[0-9A-F]{6}$/i, '有効なカラーコードを入力してください').default('#3B82F6'),
 });
 

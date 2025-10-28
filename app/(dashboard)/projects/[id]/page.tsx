@@ -19,7 +19,7 @@ const LexicalEditor = dynamic(() => import('@/components/editor/LexicalEditor'),
 
 const projectSchema = z.object({
   name: z.string().min(1, 'プロジェクト名は必須です').max(100),
-  description: z.string().max(500).nullable(),
+  description: z.string().max(2000).nullable(),
   color: z.string().regex(/^#[0-9A-F]{6}$/i),
 });
 
