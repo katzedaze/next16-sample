@@ -15,6 +15,8 @@ import ReactFlow, {
   addEdge,
   Connection,
   MarkerType,
+  EdgeChange,
+  applyEdgeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import dagre from 'dagre';
@@ -218,27 +220,50 @@ export default function DependencyGraphPage() {
     []
   );
 
-  const handleEdgeDelete = async (edgeId: string) => {
-    if (!confirm('この依存関係を削除してもよろしいですか？')) {
-      return;
-    }
+  const handleEdgesChange = useCallback(
+    async (changes: EdgeChange[]) => {
+      // 削除イベントを検出
+      const removeChanges = changes.filter((change) => change.type === 'remove');
 
-    try {
-      const response = await fetch(`/api/task-dependencies/${edgeId}`, {
-        method: 'DELETE',
-      });
+      if (removeChanges.length > 0) {
+        // 確認ダイアログを表示
+        if (!confirm('選択した依存関係を削除してもよろしいですか？')) {
+          // キャンセルされた場合は削除以外の変更のみ適用
+          const nonRemoveChanges = changes.filter((change) => change.type !== 'remove');
+          setEdges((eds) => applyEdgeChanges(nonRemoveChanges, eds));
+          return;
+        }
 
-      if (!response.ok) {
-        throw new Error('Failed to delete dependency');
+        // OKの場合は削除を実行
+        try {
+          await Promise.all(
+            removeChanges.map(async (change) => {
+              if (change.type === 'remove') {
+                const response = await fetch(`/api/task-dependencies/${change.id}`, {
+                  method: 'DELETE',
+                });
+                if (!response.ok) {
+                  throw new Error(`Failed to delete dependency ${change.id}`);
+                }
+              }
+            })
+          );
+
+          // 依存関係を再取得
+          await fetchTasks();
+        } catch (error) {
+          console.error('Error deleting dependency:', error);
+          alert('依存関係の削除に失敗しました');
+          // エラーの場合は画面を更新して元に戻す
+          await fetchTasks();
+        }
+      } else {
+        // 削除以外の変更はそのまま適用
+        setEdges((eds) => applyEdgeChanges(changes, eds));
       }
-
-      // 依存関係を再取得
-      await fetchTasks();
-    } catch (error) {
-      console.error('Error deleting dependency:', error);
-      alert('依存関係の削除に失敗しました');
-    }
-  };
+    },
+    [setEdges]
+  );
 
   if (isPending || isLoading || !session) {
     return (
@@ -345,9 +370,11 @@ export default function DependencyGraphPage() {
               nodes={nodes}
               edges={edges}
               onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
+              onEdgesChange={handleEdgesChange}
               onConnect={onConnect}
               nodeTypes={nodeTypes}
+              edgesFocusable={true}
+              edgesUpdatable={false}
               fitView
               attributionPosition="bottom-left"
             >
@@ -362,8 +389,9 @@ export default function DependencyGraphPage() {
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• ノードをドラッグ: グラフを整理</li>
               <li>• ノードの端からドラッグ: 依存関係を追加（上から下へ）</li>
-              <li>• 矢印をクリック: 依存関係を削除</li>
+              <li>• 矢印をクリックして選択 → Backspace/Delete キー: 依存関係を削除</li>
               <li>• マウスホイール: ズーム</li>
+              <li>• 右クリック + ドラッグ: グラフ全体を移動</li>
             </ul>
           </div>
         </div>
