@@ -75,16 +75,16 @@ export default function DashboardPage() {
 
   if (isPending || isLoading || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">読み込み中...</div>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">データの読み込みに失敗しました</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-900 dark:text-white">データの読み込みに失敗しました</div>
       </div>
     );
   }
@@ -192,27 +192,27 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             {/* タスクステータス詳細 */}
             <div className="lg:col-span-2 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-sm font-medium text-gray-500">未着手</div>
-                <div className="mt-1 text-2xl font-semibold text-gray-900">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">未着手</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
                   {data.stats.todoTasks}
                 </div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-sm font-medium text-gray-500">進行中</div>
-                <div className="mt-1 text-2xl font-semibold text-gray-900">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">進行中</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
                   {data.stats.inProgressTasks}
                 </div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-sm font-medium text-gray-500">レビュー</div>
-                <div className="mt-1 text-2xl font-semibold text-gray-900">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">レビュー</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
                   {data.stats.reviewTasks}
                 </div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-sm font-medium text-gray-500">完了</div>
-                <div className="mt-1 text-2xl font-semibold text-gray-900">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">完了</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
                   {data.stats.doneTasks}
                 </div>
               </div>
@@ -231,15 +231,15 @@ export default function DashboardPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* 今日の期限タスク */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   今日が期限のタスク
                 </h2>
               </div>
               <div className="p-6">
                 {data.dueTodayTasks.length === 0 ? (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     今日が期限のタスクはありません
                   </p>
                 ) : (
@@ -247,12 +247,12 @@ export default function DashboardPage() {
                     {data.dueTodayTasks.map((task) => (
                       <li
                         key={task.id}
-                        className="flex items-center justify-between p-3 bg-red-50 rounded-md"
+                        className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-md"
                       >
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {task.title}
                         </span>
-                        <span className="text-xs text-red-600 font-medium">
+                        <span className="text-xs text-red-600 dark:text-red-400 font-medium">
                           今日
                         </span>
                       </li>
@@ -263,15 +263,15 @@ export default function DashboardPage() {
             </div>
 
             {/* 今週の期限タスク */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   今週が期限のタスク
                 </h2>
               </div>
               <div className="p-6">
                 {data.dueThisWeekTasks.length === 0 ? (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     今週が期限のタスクはありません
                   </p>
                 ) : (
@@ -279,13 +279,13 @@ export default function DashboardPage() {
                     {data.dueThisWeekTasks.slice(0, 5).map((task) => (
                       <li
                         key={task.id}
-                        className="flex items-center justify-between p-3 bg-yellow-50 rounded-md"
+                        className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-md"
                       >
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
                           {task.title}
                         </span>
                         {task.dueDate && (
-                          <span className="text-xs text-yellow-600 font-medium">
+                          <span className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">
                             {new Date(task.dueDate).toLocaleDateString('ja-JP', {
                               month: 'short',
                               day: 'numeric',
@@ -306,15 +306,15 @@ export default function DashboardPage() {
             <RecentTasks tasks={data.recentTasks} />
 
             {/* 最近のアクティビティ */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   最近のアクティビティ
                 </h2>
               </div>
               <div className="p-6">
                 {data.recentActivities.length === 0 ? (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     アクティビティがありません
                   </p>
                 ) : (
@@ -322,14 +322,14 @@ export default function DashboardPage() {
                     {data.recentActivities.map((activity) => (
                       <li key={activity.id} className="flex space-x-3">
                         <div className="flex-shrink-0">
-                          <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                            <span className="text-xs font-medium text-indigo-600">
+                          <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                            <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
                               {activity.userName?.charAt(0) || 'U'}
                             </span>
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900">
+                          <p className="text-sm text-gray-900 dark:text-white">
                             <span className="font-medium">
                               {activity.userName || activity.userEmail}
                             </span>{' '}
@@ -339,7 +339,7 @@ export default function DashboardPage() {
                             </span>{' '}
                             を{activity.action}
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             {new Date(activity.createdAt).toLocaleString('ja-JP')}
                           </p>
                         </div>

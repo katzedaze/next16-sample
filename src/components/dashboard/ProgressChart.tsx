@@ -15,10 +15,10 @@ export default function ProgressChart({
 
   if (totalTasks === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">タスク進捗</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">タスク進捗</h2>
         <div className="flex items-center justify-center h-48">
-          <p className="text-gray-500">タスクがありません</p>
+          <p className="text-gray-500 dark:text-gray-400">タスクがありません</p>
         </div>
       </div>
     );
@@ -30,8 +30,8 @@ export default function ProgressChart({
   const donePercent = (doneTasks / totalTasks) * 100;
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">タスク進捗</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">タスク進捗</h2>
 
       <div className="flex items-center justify-center mb-6">
         {/* 円グラフ */}
@@ -43,8 +43,9 @@ export default function ProgressChart({
               cy="50"
               r="40"
               fill="none"
-              stroke="#E5E7EB"
+              stroke="#374151"
               strokeWidth="20"
+              className="dark:stroke-gray-700"
             />
 
             {/* 完了（緑） */}
@@ -102,10 +103,10 @@ export default function ProgressChart({
 
           {/* 中央のテキスト */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-3xl font-bold text-gray-900">
+            <div className="text-3xl font-bold text-gray-900 dark:text-white">
               {Math.round((doneTasks / totalTasks) * 100)}%
             </div>
-            <div className="text-sm text-gray-500">完了</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">完了</div>
           </div>
         </div>
       </div>
@@ -115,9 +116,9 @@ export default function ProgressChart({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-3 h-3 rounded-full bg-gray-600 mr-2"></div>
-            <span className="text-sm text-gray-700">未着手</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">未着手</span>
           </div>
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
             {todoTasks} ({Math.round(todoPercent)}%)
           </span>
         </div>
@@ -125,9 +126,9 @@ export default function ProgressChart({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-            <span className="text-sm text-gray-700">進行中</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">進行中</span>
           </div>
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
             {inProgressTasks} ({Math.round(inProgressPercent)}%)
           </span>
         </div>
@@ -135,9 +136,9 @@ export default function ProgressChart({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-            <span className="text-sm text-gray-700">レビュー</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">レビュー</span>
           </div>
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
             {reviewTasks} ({Math.round(reviewPercent)}%)
           </span>
         </div>
@@ -145,9 +146,9 @@ export default function ProgressChart({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-            <span className="text-sm text-gray-700">完了</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">完了</span>
           </div>
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm font-medium text-gray-900 dark:text-white">
             {doneTasks} ({Math.round(donePercent)}%)
           </span>
         </div>

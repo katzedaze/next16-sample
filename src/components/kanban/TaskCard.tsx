@@ -12,6 +12,14 @@ interface TaskCardProps {
   assigneeName?: string;
 }
 
+// HTMLタグを除去してプレーンテキストを取得
+const getPlainTextFromHtml = (html: string) => {
+  if (typeof window === 'undefined') return html;
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return div.textContent || div.innerText || '';
+};
+
 export function TaskCard({ task, assigneeName }: TaskCardProps) {
   const {
     attributes,
@@ -34,17 +42,17 @@ export function TaskCard({ task, assigneeName }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-white rounded-lg shadow p-4 mb-3 cursor-move hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-3 cursor-move hover:shadow-md transition-shadow"
     >
       <Link href={`/tasks/${task.id}`} className="block" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-sm font-semibold text-gray-900 mb-2 hover:text-blue-600">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400">
           {task.title}
         </h3>
       </Link>
 
       {task.description && (
-        <p className="text-xs text-gray-600 mb-3 line-clamp-2">
-          {task.description}
+        <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+          {getPlainTextFromHtml(task.description)}
         </p>
       )}
 
@@ -52,7 +60,7 @@ export function TaskCard({ task, assigneeName }: TaskCardProps) {
         <PriorityBadge priority={task.priority as 'low' | 'medium' | 'high' | 'critical'} />
 
         {task.dueDate && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             {new Date(task.dueDate).toLocaleDateString('ja-JP', {
               month: 'short',
               day: 'numeric',
@@ -62,14 +70,14 @@ export function TaskCard({ task, assigneeName }: TaskCardProps) {
       </div>
 
       {assigneeName && (
-        <div className="mt-3 pt-3 border-t border-gray-100">
+        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
           <div className="flex items-center">
-            <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-2">
-              <span className="text-xs font-medium text-gray-600">
+            <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-2">
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
                 {assigneeName.charAt(0).toUpperCase()}
               </span>
             </div>
-            <span className="text-xs text-gray-600">{assigneeName}</span>
+            <span className="text-xs text-gray-600 dark:text-gray-400">{assigneeName}</span>
           </div>
         </div>
       )}

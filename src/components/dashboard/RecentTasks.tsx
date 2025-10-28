@@ -36,32 +36,32 @@ const priorityColors = {
 export default function RecentTasks({ tasks }: RecentTasksProps) {
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">最近のタスク</h2>
-        <p className="text-sm text-gray-500">タスクがありません</p>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">最近のタスク</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400">タスクがありません</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">最近のタスク</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">最近のタスク</h2>
       </div>
-      <ul className="divide-y divide-gray-200">
+      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
         {tasks.map((task) => (
-          <li key={task.id} className="px-6 py-4 hover:bg-gray-50">
+          <li key={task.id} className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
             <Link
               href={`/projects/${task.projectId}`}
               className="block"
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {task.title}
                   </p>
                   {task.project && (
-                    <p className="text-sm text-gray-500 truncate mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
                       {task.project.name}
                     </p>
                   )}
@@ -84,7 +84,7 @@ export default function RecentTasks({ tasks }: RecentTasksProps) {
                 </div>
               </div>
               {task.dueDate && (
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   期限: {new Date(task.dueDate).toLocaleDateString('ja-JP')}
                 </p>
               )}
