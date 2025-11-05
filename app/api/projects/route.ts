@@ -51,7 +51,11 @@ export async function GET(request: NextRequest) {
 
     const allProjects = await query;
 
-    return NextResponse.json(allProjects);
+    return NextResponse.json(allProjects, {
+      headers: {
+        'Cache-Control': 'private, max-age=60, stale-while-revalidate=120',
+      },
+    });
   } catch (error) {
     console.error('Error fetching projects:', error);
     return NextResponse.json(

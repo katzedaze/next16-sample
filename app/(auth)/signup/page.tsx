@@ -8,17 +8,31 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signUp } from '@/lib/auth-client';
 import Link from 'next/link';
 
+// 強化されたパスワードポリシー
 const signupSchema = z
   .object({
-    name: z.string().min(2, '名前は2文字以上である必要があります'),
-    email: z.string().email('有効なメールアドレスを入力してください'),
+    name: z
+      .string()
+      .min(2, '名前は2文字以上である必要があります')
+      .max(50, '名前は50文字以内である必要があります')
+      .regex(/^[a-zA-Z\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\s]+$/, '名前に無効な文字が含まれています'),
+    email: z
+      .string()
+      .email('有効なメールアドレスを入力してください')
+      .max(255, 'メールアドレスは255文字以内である必要があります')
+      .toLowerCase(),
     password: z
       .string()
-      .min(8, 'パスワードは8文字以上である必要があります')
+      .min(12, 'パスワードは12文字以上である必要があります')
+      .max(128, 'パスワードは128文字以内である必要があります')
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'パスワードは大文字、小文字、数字を含む必要があります'
-      ),
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/,
+        'パスワードは大文字、小文字、数字、特殊文字（@$!%*?&#）を含む必要があります'
+      )
+      .refine((password) => {
+        // 連続した文字のチェック
+        return !/(.)\1{2,}/.test(password);
+      }, 'パスワードに同じ文字を3回以上連続で使用できません'),
     confirmPassword: z.string(),
     agreeToTerms: z.boolean().refine((val) => val === true, {
       message: '利用規約に同意する必要があります',
