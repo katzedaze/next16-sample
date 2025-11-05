@@ -134,6 +134,14 @@ npm start
 
 # Lintの実行
 npm run lint
+
+# テストの実行
+npm run test              # 全テストを実行
+npm run test:ui          # テストUIを起動
+npm run test:coverage    # カバレッジレポートを生成
+
+# バンドル分析
+npm run analyze          # バンドルサイズを視覚的に分析
 ```
 
 ## データベースコマンド（Drizzle Kit）
@@ -189,15 +197,96 @@ npx drizzle-kit studio
 
 ## デプロイ
 
-### Vercel
+### Vercel（推奨）
 
 Next.jsアプリケーションの最も簡単なデプロイ方法は[Vercel Platform](https://vercel.com/new)を使用することです。
 
-1. GitHubリポジトリをVercelに接続
-2. 環境変数を設定
-3. デプロイ
+#### デプロイ手順
+
+1. **GitHubリポジトリをVercelに接続**
+   - [Vercel Dashboard](https://vercel.com/new)にアクセス
+   - GitHubリポジトリをインポート
+
+2. **環境変数を設定**
+
+   以下の環境変数をVercelの設定画面で追加してください：
+
+   ```env
+   DATABASE_URL=your-production-database-url
+   DATABASE_AUTH_TOKEN=your-turso-auth-token
+   BETTER_AUTH_SECRET=your-production-secret
+   BETTER_AUTH_URL=https://your-domain.vercel.app
+   NODE_ENV=production
+   ```
+
+3. **デプロイ**
+   - "Deploy"ボタンをクリック
+   - 自動的にビルドとデプロイが実行されます
+
+4. **カスタムドメインの設定（オプション）**
+   - Vercelダッシュボードの"Domains"セクションで設定
+
+詳細な手順は [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) を参照してください。
+
+### その他のプラットフォーム
+
+- **Netlify**: Next.jsをサポート
+- **Railway**: データベースとアプリケーションを一緒にホスト
+- **Cloudflare Pages**: Edge環境でのデプロイ
 
 詳細は[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)を参照してください。
+
+## セキュリティ
+
+TaskFlowは以下のセキュリティ対策を実装しています：
+
+- ✅ **CSRF保護**: Better Authによる自動CSRF トークン検証
+- ✅ **XSS対策**: React/Next.jsによる自動エスケープ処理
+- ✅ **SQL インジェクション対策**: Drizzle ORMによるパラメータ化クエリ
+- ✅ **レート制限**: API エンドポイントへの過剰なリクエストを防止
+- ✅ **セッション管理**: セキュアなCookie設定（HttpOnly, Secure, SameSite）
+- ✅ **パスワードポリシー**: 強力なパスワード要件（12文字以上、大小英数特殊文字）
+
+詳細は [`docs/SECURITY.md`](./docs/SECURITY.md) を参照してください。
+
+## ドキュメント
+
+プロジェクトの詳細なドキュメントは `docs/` ディレクトリにあります：
+
+- [`docs/SETUP.md`](./docs/SETUP.md) - セットアップガイド
+- [`docs/API.md`](./docs/API.md) - API リファレンス
+- [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) - デプロイメントガイド
+- [`docs/SECURITY.md`](./docs/SECURITY.md) - セキュリティガイド
+- [`docs/task-list.md`](./docs/task-list.md) - 実装タスク一覧
+
+## テスト
+
+テストフレームワークとして Vitest を使用しています：
+
+```bash
+# テストの実行
+npm run test
+
+# UIモードでテストを実行
+npm run test:ui
+
+# カバレッジレポートの生成
+npm run test:coverage
+```
+
+テストファイルは以下のディレクトリにあります：
+- `src/lib/__tests__/` - ユーティリティ関数のテスト
+- `src/hooks/__tests__/` - カスタムフックのテスト
+- `src/components/ui/__tests__/` - UIコンポーネントのテスト
+
+## パフォーマンス
+
+本アプリケーションは以下のパフォーマンス最適化を実装しています：
+
+- **コード分割**: 動的インポートによる重いライブラリの遅延読み込み
+- **画像最適化**: next/imageによる自動最適化（AVIF/WebP対応）
+- **API キャッシング**: Cache-Controlヘッダーによる適切なキャッシュ戦略
+- **バンドル最適化**: Tree-shakingと本番環境でのconsole.log除去
 
 ## 参考リソース
 
@@ -212,3 +301,16 @@ Next.jsアプリケーションの最も簡単なデプロイ方法は[Vercel Pl
 - [Zod Documentation](https://zod.dev/)
 - [dnd-kit Documentation](https://docs.dndkit.com/)
 - [Dagre Documentation](https://github.com/dagrejs/dagre/wiki)
+
+## ライセンス
+
+このプロジェクトはMITライセンスの下で公開されています。
+
+## 貢献
+
+プルリクエストを歓迎します。大きな変更の場合は、まずissueを開いて変更内容を議論してください。
+
+---
+
+**バージョン**: 1.0.0
+**最終更新**: 2025-11-05
