@@ -4,8 +4,9 @@ import type { NextRequest } from 'next/server';
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // セッショントークンの取得
-  const sessionToken = request.cookies.get('better-auth.session_token')?.value;
+  // セッショントークンの取得（cookiePrefix: 'taskflow'を使用）
+  // Better Authのデフォルト: {prefix}.session_token
+  const sessionToken = request.cookies.get('taskflow.session_token')?.value;
 
   // 保護されたルート（認証が必要なルート）
   const protectedRoutes = ['/dashboard', '/projects', '/tasks', '/settings'];
